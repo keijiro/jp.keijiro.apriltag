@@ -29,7 +29,7 @@ public sealed class Detector : SafeHandleZeroOrMinusOneIsInvalid
     public void RemoveFamily(Family family)
       => _RemoveFamily(this, family);
 
-    public Detections Detect(ImageU8 image)
+    public DetectionArray Detect(ImageU8 image)
       => _Detect(this, image);
 
     #endregion
@@ -50,7 +50,7 @@ public sealed class Detector : SafeHandleZeroOrMinusOneIsInvalid
     static extern void _RemoveFamily(Detector detector, Family family);
 
     [DllImport("AprilTag", EntryPoint="apriltag_detector_detect")]
-    static extern Detections _Detect(Detector detector, ImageU8 image);
+    static extern DetectionArray _Detect(Detector detector, ImageU8 image);
 
     #endregion
 }
