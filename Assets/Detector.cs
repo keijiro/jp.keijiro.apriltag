@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
@@ -18,7 +19,43 @@ public sealed class Detector : SafeHandleZeroOrMinusOneIsInvalid
 
     #endregion
 
-    #region Public methods
+    #region apriltag_detector struct representation
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct InternalData
+    {
+        internal int nthreads;
+        internal float quad_decimate;
+        internal float quad_sigma;
+        internal int refine_edges;
+        internal double decode_sharpening;
+        internal int debug;
+    }
+
+    unsafe ref InternalData Data
+      => ref Unsafe.AsRef<InternalData>((void*)handle);
+
+    #endregion
+
+    #region Public properties and methods
+
+    public int ThreadCount
+      { get => Data.nthreads; set => Data.nthreads = value; }
+
+    public float QuadDecimate
+      { get => Data.quad_decimate; set => Data.quad_decimate = value; }
+
+    public float QuadSigma
+      { get => Data.quad_sigma; set => Data.quad_sigma = value; }
+
+    public int RefineEdges
+      { get => Data.refine_edges; set => Data.refine_edges = value; }
+
+    public double DecodeSharpening
+      { get => Data.decode_sharpening; set => Data.decode_sharpening = value; }
+
+    public bool Debug
+      { get => Data.debug != 0; set => Data.debug = value ? 1 : 0; }
 
     public static Detector Create()
       => _Create();

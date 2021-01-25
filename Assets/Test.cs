@@ -8,8 +8,11 @@ sealed class Test : MonoBehaviour
     void Start ()
     {
         using var detector = Detector.Create();
-        using var family = Family.CreateTagStandard41h12();
+        detector.QuadDecimate = 4;
+        detector.Debug = true;
+        Debug.Log(detector.QuadDecimate);
 
+        using var family = Family.CreateTagStandard41h12();
         detector.AddFamily(family);
 
         using var image = ImageU8.Create(256, 256);
