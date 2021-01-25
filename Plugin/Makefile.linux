@@ -1,0 +1,2 @@
+PLATFORM = Linux
+include Common.mk
