@@ -26,21 +26,23 @@ SRCS = src/apriltag.c \
 
 OBJS = $(SRCS:.c=.o)
 
-LIBS = -Wl,-Bstatic -lpthread
-
 CCFLAGS = -O2 -Wall -I. -Iinclude
 LDFLAGS = -shared
 
 ifeq ($(PLATFORM), Windows)
+    PTHREAD = -Wl,-Bstatic -lpthread
     BIN_PREFIX = x86_64-w64-mingw32
     OUTPUT = $(TARGET).dll
 else
+    PTHREAD = -lpthread
     BIN_PREFIX =
     CCFLAGS += -fPIC
     LDFLAGS += -rdynamic -fPIC
     ifeq ($(PLATFORM), MacOS)
+        CCFLAGS += -target x86_64-apple-macos10.12
+        LDFLAGS += -target x86_64-apple-macos10.12
         OUTPUT = $(TARGET).bundle
-	NOSTRIP = true
+        NOSTRIP = true
     else
         OUTPUT = lib$(TARGET).so
     endif
@@ -61,7 +63,7 @@ clean:
 	rm -f $(OUTPUT) $(OBJS)
 
 $(OUTPUT): $(OBJS)
-	$(CC) $(LDFLAGS) -o $(OUTPUT) $(OBJS) $(LIBS)
+	$(CC) $(LDFLAGS) -o $(OUTPUT) $(OBJS) $(PTHREAD)
 
 .c.o:
 	$(CC) $(CCFLAGS) -c -o $@ $<
