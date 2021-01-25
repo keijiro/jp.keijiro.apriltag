@@ -29,6 +29,9 @@ public sealed class Detector : SafeHandleZeroOrMinusOneIsInvalid
     public void RemoveFamily(Family family)
       => _RemoveFamily(this, family);
 
+    public Detections Detect(ImageU8 image)
+      => _Detect(this, image);
+
     #endregion
 
     #region Unmanaged interface
@@ -44,8 +47,10 @@ public sealed class Detector : SafeHandleZeroOrMinusOneIsInvalid
       (Detector detector, Family family, int correctedBits);
 
     [DllImport("AprilTag", EntryPoint="apriltag_detector_remove_family")]
-    static extern void _RemoveFamily
-      (Detector detector, Family family);
+    static extern void _RemoveFamily(Detector detector, Family family);
+
+    [DllImport("AprilTag", EntryPoint="apriltag_detector_detect")]
+    static extern Detections _Detect(Detector detector, ImageU8 image);
 
     #endregion
 }
