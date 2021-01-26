@@ -45,7 +45,7 @@ public sealed class ImageU8 : SafeHandleZeroOrMinusOneIsInvalid
     public IntPtr Buffer => Data.buf;
 
     public static ImageU8 Create(int width, int height)
-      => _Create((uint)width, (uint)height);
+      => _CreateStride((uint)width, (uint)height, (uint)width);
 
     unsafe public void SetImage(NativeSlice<byte> image)
     {
@@ -55,6 +55,9 @@ public sealed class ImageU8 : SafeHandleZeroOrMinusOneIsInvalid
     #endregion
 
     #region Unmanaged interface
+
+    [DllImport("AprilTag", EntryPoint="image_u8_create_stride")]
+    static extern ImageU8 _CreateStride(uint width, uint height, uint stride);
 
     [DllImport("AprilTag", EntryPoint="image_u8_create")]
     static extern ImageU8 _Create(uint width, uint height);
