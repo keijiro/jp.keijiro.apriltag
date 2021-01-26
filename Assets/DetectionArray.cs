@@ -40,6 +40,10 @@ public sealed class DetectionArray : SafeHandleZeroOrMinusOneIsInvalid
     public int Length
       => (int)Data.size;
 
+    unsafe public Detection this[int i]
+      => Marshal.PtrToStructure<Detection>
+        (new Span<IntPtr>((void*)Data.data, Length)[i]);
+
     #endregion
 
     #region Unmanaged interface

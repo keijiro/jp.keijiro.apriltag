@@ -15,7 +15,8 @@ sealed class Test : MonoBehaviour
         image.SetImage(_image.GetRawTextureData<byte>());
 
         using (var detections = detector.Detect(image))
-            Debug.Log(detections.Length);
+            for (var i = 0; i < detections.Length; i++)
+                Debug.Log(detections[i].ID);
 
         detector.RemoveFamily(family);
     }
