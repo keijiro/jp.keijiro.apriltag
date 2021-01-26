@@ -1,8 +1,17 @@
 {
   "dependencies": {
+    "com.unity.burst": {
+      "version": "1.5.0-pre.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.mathematics": "1.2.1"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.mathematics": {
       "version": "1.2.1",
-      "depth": 0,
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -38,6 +47,12 @@
       "source": "registry",
       "dependencies": {},
       "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "com.unity.modules.audio": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
     }
   }
 }

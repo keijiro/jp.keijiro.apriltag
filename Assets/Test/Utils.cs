@@ -1,5 +1,10 @@
 using AprilTag;
+using System;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
+using Unity.Burst;
+using UnityEngine;
 
 static class MatdExtensions
 {
@@ -10,4 +15,29 @@ static class MatdExtensions
       => math.float3x3((float)src.e00, (float)src.e01, (float)src.e02,
                        (float)src.e10, (float)src.e11, (float)src.e12,
                        (float)src.e20, (float)src.e21, (float)src.e22);
+}
+
+[BurstCompile]
+static class ImageUtil
+{
+    unsafe public static void
+      CopyRawTextureData(NativeArray<byte> data, ImageU8 image)
+    {
+        fixed (byte* p = &image.Buffer.GetPinnableReference())
+            UnsafeUtility.MemCpy(p, data.GetUnsafeReadOnlyPtr(), data.Length);
+    }
+
+    unsafe public static void
+      Convert(ReadOnlySpan<Color32> data, ImageU8 image)
+    {
+        fixed (Color32* src = &data.GetPinnableReference())
+            fixed (byte* dst = &image.Buffer.GetPinnableReference())
+                BurstConvert(src, dst, data.Length);
+    }
+
+    [BurstCompile]
+    unsafe public static void BurstConvert(Color32* src, byte* dst, int length)
+    {
+        for (var i = 0; i < length; i++) dst[i] = src[i].g;
+    }
 }

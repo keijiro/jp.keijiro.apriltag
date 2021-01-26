@@ -1,13 +1,16 @@
 {
-    "scopedRegistries": [
-      {
-        "name": "Unity NuGet",
-        "url": "https://unitynuget-registry.azurewebsites.net",
-        "scopes": [ "org.nuget" ]
-      }
-    ],
-    "dependencies": {
-        "org.nuget.system.memory": "4.5.3",
-        "com.unity.mathematics": "1.2.1"
+  "scopedRegistries": [
+    {
+      "name": "Unity NuGet",
+      "url": "https://unitynuget-registry.azurewebsites.net",
+      "scopes": [
+        "org.nuget"
+      ]
     }
+  ],
+  "dependencies": {
+    "com.unity.burst": "1.5.0-pre.3",
+    "org.nuget.system.memory": "4.5.3",
+    "com.unity.modules.audio": "1.0.0"
+  }
 }

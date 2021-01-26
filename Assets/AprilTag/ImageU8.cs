@@ -42,15 +42,12 @@ public sealed class ImageU8 : SafeHandleZeroOrMinusOneIsInvalid
     public int Width => Data.width;
     public int Height => Data.height;
     public int Stride => Data.stride;
-    public IntPtr Buffer => Data.buf;
+
+    unsafe public Span<byte> Buffer
+      => new Span<byte>((void*)Data.buf, Stride * Height);
 
     public static ImageU8 Create(int width, int height)
       => _CreateStride((uint)width, (uint)height, (uint)width);
-
-    unsafe public void SetImage(NativeSlice<byte> image)
-    {
-        UnsafeUtility.MemCpy((void*)Data.buf, image.GetUnsafeReadOnlyPtr(), image.Length);
-    }
 
     #endregion
 

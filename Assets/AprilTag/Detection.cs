@@ -26,6 +26,11 @@ public struct Detection
     public int ID => id;
     public int Hamming => hamming;
     public float DecisionMargin => decision_margin;
+    public (double x, double y) Center => (c0, c1);
+    public (double x, double y) Corner1 => (p00, p01);
+    public (double x, double y) Corner2 => (p10, p11);
+    public (double x, double y) Corner3 => (p20, p21);
+    public (double x, double y) Corner4 => (p30, p31);
 
     #endregion
 }

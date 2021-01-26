@@ -1,6 +1,6 @@
-using UnityEngine;
 using AprilTag;
 using Pose = AprilTag.Pose;
+using UnityEngine;
 
 sealed class StaticImageTest : MonoBehaviour
 {
@@ -10,10 +10,13 @@ sealed class StaticImageTest : MonoBehaviour
     {
         using var detector = Detector.Create();
         using var family = Family.CreateTagStandard41h12();
+
         detector.AddFamily(family);
 
-        using var image = ImageU8.Create(256, 256);
-        image.SetImage(_image.GetRawTextureData<byte>());
+        using var image = ImageU8.Create(_image.width, _image.height);
+
+        using (var raw = _image.GetRawTextureData<byte>())
+            ImageUtil.CopyRawTextureData(raw, image);
 
         using (var detections = detector.Detect(image))
         {
