@@ -46,7 +46,7 @@ Shader "Hidden/AprilTag/WebCam/Visualizer"
 
     float4 FragmentKeyPoints(float4 position : SV_Position) : SV_Target
     {
-        return float4(1, 0, 0, 1);
+        return float4(1, 0, 0, 0.5);
     }
 
     ENDCG
@@ -63,7 +63,7 @@ Shader "Hidden/AprilTag/WebCam/Visualizer"
         }
         Pass
         {
-            ZTest Always ZWrite Off Cull Off
+            ZTest Always ZWrite Off Cull Off Blend SrcAlpha OneMinusSrcAlpha
             CGPROGRAM
             #pragma vertex VertexKeyPoints
             #pragma fragment FragmentKeyPoints

@@ -23,8 +23,9 @@ static class ImageUtil
     unsafe public static void
       CopyRawTextureData(NativeArray<byte> data, ImageU8 image)
     {
-        fixed (byte* p = &image.Buffer.GetPinnableReference())
-            UnsafeUtility.MemCpy(p, data.GetUnsafeReadOnlyPtr(), data.Length);
+        var src = (byte*)data.GetUnsafeReadOnlyPtr();
+        fixed (byte* dst = &image.Buffer.GetPinnableReference())
+            BurstCopy(src, dst, image.Width, image.Height, image.Stride);
     }
 
     unsafe public static void
@@ -32,12 +33,39 @@ static class ImageUtil
     {
         fixed (Color32* src = &data.GetPinnableReference())
             fixed (byte* dst = &image.Buffer.GetPinnableReference())
-                BurstConvert(src, dst, data.Length);
+                BurstConvert(src, dst, image.Width, image.Height, image.Stride);
     }
 
     [BurstCompile]
-    unsafe public static void BurstConvert(Color32* src, byte* dst, int length)
+    unsafe static void BurstCopy
+      (byte* src, byte* dst, int width, int height, int stride)
     {
-        for (var i = 0; i < length; i++) dst[i] = src[i].g;
+        var offs_src = 0;
+        var offs_dst = stride * (height - 1);
+
+        for (var y = 0; y < height; y++)
+        {
+            UnsafeUtility.MemCpy(dst + offs_dst, src + offs_src, width);
+
+            offs_src += stride;
+            offs_dst -= stride;
+        }
+    }
+
+    [BurstCompile]
+    unsafe static void BurstConvert
+      (Color32* src, byte* dst, int width, int height, int stride)
+    {
+        var offs_src = 0;
+        var offs_dst = stride * (height - 1);
+
+        for (var y = 0; y < height; y++)
+        {
+            for (var x = 0; x < width; x++)
+                dst[offs_dst + x] = src[offs_src + x].g;
+
+            offs_src += stride;
+            offs_dst -= stride;
+        }
     }
 }
