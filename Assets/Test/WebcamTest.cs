@@ -7,48 +7,45 @@ sealed class WebcamTest : MonoBehaviour
 {
     [SerializeField, HideInInspector] Shader _visualizerShader = null;
 
+    const int Width = 1280;
+    const int Height = 720;
+
     WebCamTexture _webcamRaw;
     RenderTexture _webcamBuffer;
     Color32 [] _readBuffer;
-
-    Material _visualizer;
 
     Detector _detector;
     Family _family;
     ImageU8 _image;
 
     List<Vector2> _vertices;
+    Material _visualizer;
 
-    Vector2 NormalizeVertex((double x, double y) position)
-      => new Vector2(0 + (float)(position.x / _webcamRaw.width),
-                     1 - (float)(position.y / _webcamRaw.height));
+    Vector2 NormalizeVertex((double x, double y) p)
+      => new Vector2(0 + (float)p.x / Width, 1 - (float)p.y / Height);
 
     void Start()
     {
-        _webcamRaw = new WebCamTexture(1280, 720, 60);
+        _webcamRaw = new WebCamTexture(Width, Height, 60);
+        _webcamBuffer = new RenderTexture(Width, Height, 0);
+        _readBuffer = new Color32 [Width * Height];
+
         _webcamRaw.Play();
-
-        _webcamBuffer = new RenderTexture(1280, 720, 0);
-
-        _readBuffer = new Color32 [_webcamRaw.width * _webcamRaw.height];
-
-        _visualizer = new Material(_visualizerShader);
 
         _detector = Detector.Create();
         _family = Family.CreateTagStandard41h12();
+        _image = ImageU8.Create(Width, Height);
 
         _detector.AddFamily(_family);
 
-        _image = ImageU8.Create(_webcamRaw.width, _webcamRaw.height);
-
         _vertices = new List<Vector2>();
+        _visualizer = new Material(_visualizerShader);
     }
 
     void OnDestroy()
     {
         if (_webcamRaw != null) Destroy(_webcamRaw);
         if (_webcamBuffer != null) Destroy(_webcamBuffer);
-        if (_visualizer != null) Destroy(_visualizer);
 
         if (_detector != null && _family != null)
             _detector.RemoveFamily(_family);
@@ -56,14 +53,16 @@ sealed class WebcamTest : MonoBehaviour
         _detector?.Dispose();
         _family?.Dispose();
         _image?.Dispose();
+
+        if (_visualizer != null) Destroy(_visualizer);
     }
 
     void Update()
     {
+        Graphics.Blit(_webcamRaw, _webcamBuffer);
+
         _webcamRaw.GetPixels32(_readBuffer);
         ImageUtil.Convert(_readBuffer, _image);
-
-        Graphics.Blit(_webcamRaw, _webcamBuffer);
 
         _vertices.Clear();
 
@@ -82,17 +81,17 @@ sealed class WebcamTest : MonoBehaviour
 
     void OnPostRender()
     {
-        _visualizer.SetPass(0);
         _visualizer.SetTexture("_CameraFeed", _webcamBuffer);
+        _visualizer.SetPass(0);
         Graphics.DrawProceduralNow(MeshTopology.Quads, 4, 1);
 
         for (var i = 0; i < _vertices.Count; i += 4)
         {
-            _visualizer.SetPass(1);
             _visualizer.SetVector("_Corner1", _vertices[i + 0]);
             _visualizer.SetVector("_Corner2", _vertices[i + 1]);
             _visualizer.SetVector("_Corner3", _vertices[i + 2]);
             _visualizer.SetVector("_Corner4", _vertices[i + 3]);
+            _visualizer.SetPass(1);
             Graphics.DrawProceduralNow(MeshTopology.Quads, 4, 1);
         }
     }

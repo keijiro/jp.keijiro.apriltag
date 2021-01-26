@@ -46,7 +46,7 @@ Shader "Hidden/AprilTag/WebCam/Visualizer"
 
     float4 FragmentKeyPoints(float4 position : SV_Position) : SV_Target
     {
-        return float4(1, 0, 0, 0.5);
+        return float4(1, 0, 0, 0.5 + 0.2 * sin(_Time.y * 100));
     }
 
     ENDCG
