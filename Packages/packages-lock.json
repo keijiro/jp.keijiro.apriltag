@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.unity.mathematics": {
+      "version": "1.2.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "org.nuget.system.buffers": {
       "version": "4.4.0",
       "depth": 1,
