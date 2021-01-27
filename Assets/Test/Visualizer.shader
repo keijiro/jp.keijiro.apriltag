@@ -20,7 +20,7 @@ Shader "Hidden/AprilTag/WebCam/Visualizer"
         float x = vid >> 1;
         float y = (vid & 1) ^ (vid >> 1);
 
-        position = float4(float2(x, y) * 2 - 1, 1, 1);
+        position = float4(float2(x, y) * 2 - 1, 0, 1);
         uv = float2(x, y);
     }
 
@@ -55,7 +55,6 @@ Shader "Hidden/AprilTag/WebCam/Visualizer"
     {
         Pass
         {
-            ZTest Always ZWrite Off Cull Off
             CGPROGRAM
             #pragma vertex VertexBlit
             #pragma fragment FragmentBlit
