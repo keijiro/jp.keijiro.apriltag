@@ -1,11 +1,15 @@
 using AprilTag;
-using Pose = AprilTag.Pose;
-using System.Collections.Generic;
 using UnityEngine;
+using Unity.Mathematics;
+
+using Pose = AprilTag.Pose;
+using UI = UnityEngine.UI;
 
 sealed class WebcamTest : MonoBehaviour
 {
-    [SerializeField, HideInInspector] Shader _visualizerShader = null;
+    [SerializeField] float _tagSize = 0.05f;
+    [SerializeField] Material _tagMaterial = null;
+    [SerializeField] UI.RawImage _webcamPreview = null;
 
     const int Width = 1280;
     const int Height = 720;
@@ -13,39 +17,34 @@ sealed class WebcamTest : MonoBehaviour
     WebCamTexture _webcamRaw;
     RenderTexture _webcamBuffer;
     Color32 [] _readBuffer;
+    Mesh _cubeMesh;
 
     Detector _detector;
     Family _family;
     ImageU8 _image;
-
-    List<Vector2> _vertices;
-    Material _visualizer;
-
-    Vector2 NormalizeVertex((double x, double y) p)
-      => new Vector2(0 + (float)p.x / Width, 1 - (float)p.y / Height);
 
     void Start()
     {
         _webcamRaw = new WebCamTexture(Width, Height, 60);
         _webcamBuffer = new RenderTexture(Width, Height, 0);
         _readBuffer = new Color32 [Width * Height];
+        _cubeMesh = BuildCubeMesh();
 
         _webcamRaw.Play();
+        _webcamPreview.texture = _webcamBuffer;
 
         _detector = Detector.Create();
         _family = Family.CreateTagStandard41h12();
         _image = ImageU8.Create(Width, Height);
 
         _detector.AddFamily(_family);
-
-        _vertices = new List<Vector2>();
-        _visualizer = new Material(_visualizerShader);
     }
 
     void OnDestroy()
     {
-        if (_webcamRaw != null) Destroy(_webcamRaw);
-        if (_webcamBuffer != null) Destroy(_webcamBuffer);
+        Destroy(_webcamRaw);
+        Destroy(_webcamBuffer);
+        Destroy(_cubeMesh);
 
         if (_detector != null && _family != null)
             _detector.RemoveFamily(_family);
@@ -53,8 +52,6 @@ sealed class WebcamTest : MonoBehaviour
         _detector?.Dispose();
         _family?.Dispose();
         _image?.Dispose();
-
-        if (_visualizer != null) Destroy(_visualizer);
     }
 
     void Update()
@@ -64,35 +61,56 @@ sealed class WebcamTest : MonoBehaviour
         _webcamRaw.GetPixels32(_readBuffer);
         ImageUtil.Convert(_readBuffer, _image);
 
-        _vertices.Clear();
-
         using (var detections = _detector.Detect(_image))
         {
             for (var i = 0; i < detections.Length; i++)
             {
                 ref var det = ref detections[i];
-                _vertices.Add(NormalizeVertex(det.Corner1));
-                _vertices.Add(NormalizeVertex(det.Corner2));
-                _vertices.Add(NormalizeVertex(det.Corner3));
-                _vertices.Add(NormalizeVertex(det.Corner4));
+
+                var fov = GetComponent<Camera>().fieldOfView * Mathf.Deg2Rad;
+                var fl = Height / (2 * Mathf.Tan(fov / 2));
+
+                var info = new DetectionInfo
+                  (ref det, _tagSize, fl, fl, Width / 2.0f, Height / 2.0f);
+
+                using (var pose = new Pose(ref info))
+                {
+                    var r = math.quaternion(pose.R.AsFloat3x3());
+                    r = r.value * math.float4(-1, 1, -1, 1);
+
+                    var mtx = Matrix4x4.TRS(pose.t.AsFloat3() * math.float3(1, -1, 1), r, Vector3.one * _tagSize);
+                    Graphics.DrawMesh(_cubeMesh, mtx, _tagMaterial, 0);
+                }
             }
         }
     }
 
-    void OnPostRender()
+    public static Mesh BuildCubeMesh()
     {
-        _visualizer.SetTexture("_CameraFeed", _webcamBuffer);
-        _visualizer.SetPass(0);
-        Graphics.DrawProceduralNow(MeshTopology.Quads, 4, 1);
+        var vtx = new Vector3 [] { new Vector3(-0.5f, -0.5f, 0),
+                                   new Vector3(+0.5f, -0.5f, 0),
+                                   new Vector3(+0.5f, +0.5f, 0),
+                                   new Vector3(-0.5f, +0.5f, 0),
+                                   new Vector3(-0.5f, -0.5f, -1),
+                                   new Vector3(+0.5f, -0.5f, -1),
+                                   new Vector3(+0.5f, +0.5f, -1),
+                                   new Vector3(-0.5f, +0.5f, -1),
+                                   new Vector3(-0.2f, 0, 0),
+                                   new Vector3(+0.2f, 0, 0),
+                                   new Vector3(0, -0.2f, 0),
+                                   new Vector3(0, +0.2f, 0),
+                                   new Vector3(0, 0, 0),
+                                   new Vector3(0, 0, -1.5f) };
 
-        for (var i = 0; i < _vertices.Count; i += 4)
-        {
-            _visualizer.SetVector("_Corner1", _vertices[i + 0]);
-            _visualizer.SetVector("_Corner2", _vertices[i + 1]);
-            _visualizer.SetVector("_Corner3", _vertices[i + 2]);
-            _visualizer.SetVector("_Corner4", _vertices[i + 3]);
-            _visualizer.SetPass(1);
-            Graphics.DrawProceduralNow(MeshTopology.Quads, 4, 1);
-        }
+        var idx = new int [] { 0, 1, 1, 2, 2, 3, 3, 0,
+                               4, 5, 5, 6, 6, 7, 7, 4,
+                               0, 4, 1, 5, 2, 6, 3, 7,
+                               8, 9, 10, 11, 12, 13 };
+
+        var mesh = new Mesh();
+        mesh.vertices = vtx;
+        mesh.SetIndices(idx, MeshTopology.Lines, 0);
+
+        return mesh;
     }
 }
