@@ -246,8 +246,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fe7d1562f4eea84abd2b8136c2e1aff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _focalLength: 2.51
-  _tagSize: 0.03
+  _focalLength: 790
+  _tagSize: 0.021
   _prefab: {fileID: 1864934496939185742, guid: e2fe709fd1d34b24c844a8ee978ecf1d, type: 3}
   _visualizerShader: {fileID: 4800000, guid: cb4ba12ddf3b1ae4388ea509f295ef3a, type: 3}
 --- !u!4 &1427253649
@@ -289,7 +289,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 1000
-  field of view: 22.523388
+  field of view: 48.991325
   orthographic: 0
   orthographic size: 0.5
   m_Depth: 0

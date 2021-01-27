@@ -6,7 +6,6 @@ using Unity.Mathematics;
 
 sealed class WebcamTest2 : MonoBehaviour
 {
-    [SerializeField] float _focalLength = 0.3f;
     [SerializeField] float _tagSize = 0.05f;
     [SerializeField] GameObject _prefab = null;
     [SerializeField, HideInInspector] Shader _visualizerShader = null;
@@ -71,7 +70,9 @@ sealed class WebcamTest2 : MonoBehaviour
             {
                 ref var det = ref detections[i];
 
-                var fl = Height * _focalLength;
+                var fov = GetComponent<Camera>().fieldOfView * Mathf.Deg2Rad;
+                var fl = Height / (2 * Mathf.Tan(fov / 2));
+
                 var info = new DetectionInfo
                   (ref det, _tagSize, fl, fl, Width / 2.0f, Height / 2.0f);
 
