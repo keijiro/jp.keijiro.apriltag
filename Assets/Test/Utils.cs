@@ -1,10 +1,29 @@
 using AprilTag;
 using System;
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
 using Unity.Burst;
 using UnityEngine;
+
+static class SystemConfig
+{
+    // TODO: It can be too much for high-end multicore CPUs.
+    public static int PreferredThreadCount
+      => Mathf.Max(1, Unity.Jobs.LowLevel.Unsafe.JobsUtility.JobWorkerCount);
+}
+
+static class NativeArrayExtensions
+{
+    public static void
+      CopyTo<T>(this NativeArray<T> array, List<T> list) where T : unmanaged
+    {
+        list.Clear();
+        list.Capacity = array.Length;
+        for (var i = 0; i < array.Length; i++) list.Add(array[i]);
+    }
+}
 
 static class MatdExtensions
 {

@@ -9,7 +9,7 @@ sealed class WebcamTest : MonoBehaviour
     const int Width = 1280;
     const int Height = 720;
 
-    BulkDetector _detector;
+    TagDetector _detector;
     WebCamTexture _webcamRaw;
     RenderTexture _webcamBuffer;
     Color32 [] _readBuffer;
@@ -17,7 +17,7 @@ sealed class WebcamTest : MonoBehaviour
 
     void Start()
     {
-        _detector = new BulkDetector(Width, Height, 8);
+        _detector = new TagDetector(Width, Height);
         _webcamRaw = new WebCamTexture(Width, Height, 60);
         _webcamBuffer = new RenderTexture(Width, Height, 0);
         _readBuffer = new Color32 [Width * Height];
