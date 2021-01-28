@@ -25,7 +25,7 @@ sealed class WebcamTest : MonoBehaviour
 
     void Start()
     {
-        _webcamRaw = new WebCamTexture(Width, Height, 60);
+        _webcamRaw = new WebCamTexture(1920, 1080, 60);
         _webcamBuffer = new RenderTexture(Width, Height, 0);
         _readBuffer = new Color32 [Width * Height];
         _cubeMesh = BuildCubeMesh();
@@ -37,6 +37,8 @@ sealed class WebcamTest : MonoBehaviour
         _family = Family.CreateTagStandard41h12();
         _image = ImageU8.Create(Width, Height);
 
+        _detector.ThreadCount = 8;
+        _detector.QuadDecimate = 4;
         _detector.AddFamily(_family);
     }
 
