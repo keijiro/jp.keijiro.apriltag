@@ -5,15 +5,10 @@ SRCS = src/apriltag.c \
        src/apriltag_quad_thresh.c \
        src/tagStandard41h12.c \
        common/g2d.c \
-       common/getopt.c \
        common/homography.c \
        common/image_u8.c \
        common/image_u8x3.c \
-       common/image_u8x4.c \
        common/matd.c \
-       common/pam.c \
-       common/pjpeg-idct.c \
-       common/pjpeg.c \
        common/pnm.c \
        common/string_util.c \
        common/svd22.c \
