@@ -19,30 +19,20 @@ public sealed class DetectionArray : SafeHandleZeroOrMinusOneIsInvalid
 
     #endregion
 
-    #region zarray struct representation
+    #region zarray representation
 
-    [StructLayoutAttribute(LayoutKind.Sequential)]
-    internal struct InternalData
-    {
-        internal ulong el_sz;
-        internal int size;
-        internal int alloc;
-        internal IntPtr data;
-    }
-
-    unsafe ref InternalData Data
-      => ref Unsafe.AsRef<InternalData>((void*)handle);
+    unsafe ref ZArray<IntPtr> AsPointerArray
+      => ref Unsafe.AsRef<ZArray<IntPtr>>((void*)handle);
 
     #endregion
 
     #region Public methods
 
     public int Length
-      => (int)Data.size;
+      => AsPointerArray.AsSpan.Length;
 
-    unsafe public ref Detection this[int i]
-      => ref Unsafe.AsRef<Detection>
-        ((void*)(new Span<IntPtr>((void*)Data.data, Length)[i]));
+    public unsafe ref Detection this[int i]
+      => ref Unsafe.AsRef<Detection>((void*)AsPointerArray.AsSpan[i]);
 
     #endregion
 
