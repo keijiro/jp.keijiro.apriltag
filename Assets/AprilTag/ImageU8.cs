@@ -47,7 +47,7 @@ public sealed class ImageU8 : SafeHandleZeroOrMinusOneIsInvalid
       => new Span<byte>((void*)Data.buf, Stride * Height);
 
     public static ImageU8 Create(int width, int height)
-      => _CreateStride((uint)width, (uint)height, (uint)width);
+      => _Create((uint)width, (uint)height);
 
     #endregion
 

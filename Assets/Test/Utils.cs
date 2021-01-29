@@ -66,7 +66,7 @@ static class ImageUtil
         {
             UnsafeUtility.MemCpy(dst + offs_dst, src + offs_src, width);
 
-            offs_src += stride;
+            offs_src += width;
             offs_dst -= stride;
         }
     }
@@ -83,7 +83,7 @@ static class ImageUtil
             for (var x = 0; x < width; x++)
                 dst[offs_dst + x] = src[offs_src + x].g;
 
-            offs_src += stride;
+            offs_src += width;
             offs_dst -= stride;
         }
     }
