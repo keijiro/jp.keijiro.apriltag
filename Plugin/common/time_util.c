@@ -48,9 +48,18 @@ void timeutil_rest_destroy(timeutil_rest_t *rest)
 
 int64_t utime_now() // blacklist-ignore
 {
+#ifdef __MINGW32__
+    LARGE_INTEGER f, t;
+    QueryPerformanceFrequency(&f);
+    QueryPerformanceCounter(&t);
+    t.QuadPart *= 1000000;
+    t.QuadPart /= f.QuadPart;
+    return t.QuadPart;
+#else
     struct timeval tv;
     gettimeofday (&tv, NULL); // blacklist-ignore
     return (int64_t) tv.tv_sec * 1000000 + tv.tv_usec;
+#endif
 }
 
 int64_t utime_get_seconds(int64_t v)
