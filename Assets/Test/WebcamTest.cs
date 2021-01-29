@@ -1,10 +1,12 @@
 using UnityEngine;
+using System.Linq;
 
 sealed class WebcamTest : MonoBehaviour
 {
     [SerializeField] float _tagSize = 0.05f;
     [SerializeField] Material _tagMaterial = null;
     [SerializeField] UnityEngine.UI.RawImage _webcamPreview = null;
+    [SerializeField] UnityEngine.UI.Text _debugText = null;
 
     const int Width = 1280;
     const int Height = 720;
@@ -49,5 +51,9 @@ sealed class WebcamTest : MonoBehaviour
             var mtx = Matrix4x4.TRS(tag.position, tag.rotation, tagScale);
             Graphics.DrawMesh(_tagMesh, mtx, _tagMaterial, gameObject.layer);
         }
+
+        if (Time.frameCount % 30 == 0)
+            _debugText.text = _detector.ProfileData.Aggregate
+              ("Profile (usec)", (c, n) => $"{c}\n{n.name} : {n.time}");
     }
 }

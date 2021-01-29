@@ -27,6 +27,7 @@ sealed class TagDetector : System.IDisposable
     #region Internal data
 
     List<TagPose> _detectedTags = new List<TagPose>();
+    List<(string, long)> _profileData;
 
     #endregion
 
@@ -64,9 +65,14 @@ sealed class TagDetector : System.IDisposable
     public IEnumerable<TagPose> DetectedTags
       => _detectedTags;
 
+    public IEnumerable<(string name, long time)> ProfileData
+      => _profileData ?? (_profileData = GenerateProfileData());
+
     public void DetectTags
       (UnityEngine.Color32[] image, float fov, float tagSize)
     {
+        _profileData = null;
+
         // Run the AprilTag detector.
         ImageUtil.Convert(image, _image);
         using var tags = _detector.Detect(_image);
@@ -99,6 +105,24 @@ sealed class TagDetector : System.IDisposable
 
         // Job output -> managed list
         jobOutput.CopyTo(_detectedTags);
+    }
+
+    #endregion
+
+    #region Profile data aggregation
+
+    List<(string, long)> GenerateProfileData()
+    {
+        var list = new List<(string, long)>();
+        var stamps = _detector.TimeProfile.Stamps;
+        var time = _detector.TimeProfile.UTime;
+        for (var i = 0; i < stamps.Length; i++)
+        {
+            var stamp = stamps[i];
+            list.Add((stamp.Name, stamp.UTime - time));
+            time = stamp.UTime;
+        }
+        return list;
     }
 
     #endregion

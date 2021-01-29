@@ -30,6 +30,20 @@ public sealed class Detector : SafeHandleZeroOrMinusOneIsInvalid
         internal int refine_edges;
         internal double decode_sharpening;
         internal int debug;
+        internal int min_cluster_pixels;
+        internal int max_nmaxima;
+        internal float critical_rad;
+        internal float cos_critical_rad;
+        internal float max_line_fit_mse;
+        internal int min_white_black_diff;
+        internal int deglitch;
+        internal IntPtr tp;
+        internal uint nedges;
+        internal uint nsegments;
+        internal uint nquads;
+        internal IntPtr tag_families;
+        internal IntPtr wp;
+        // pthread_mutex_t mutex;
     }
 
     unsafe ref InternalData Data
@@ -56,6 +70,9 @@ public sealed class Detector : SafeHandleZeroOrMinusOneIsInvalid
 
     public bool Debug
       { get => Data.debug != 0; set => Data.debug = value ? 1 : 0; }
+
+    public unsafe ref TimeProfile TimeProfile
+      => ref Unsafe.AsRef<TimeProfile>((void*)Data.tp);
 
     public static Detector Create()
       => _Create();
