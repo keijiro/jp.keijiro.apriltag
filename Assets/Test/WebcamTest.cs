@@ -39,6 +39,8 @@ sealed class WebcamTest : MonoBehaviour
 
     void Update()
     {
+        if (_webcamRaw.width <= 16) return; // macOS
+
         _webcamRaw.GetPixels32(_readBuffer);
         Graphics.Blit(_webcamRaw, _webcamBuffer);
 
