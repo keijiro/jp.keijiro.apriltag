@@ -52,7 +52,7 @@ copy: $(OUTPUT)
 ifndef NOSTRIP
 	$(STRIP) $(OUTPUT)
 endif
-	cp -f $(OUTPUT) ../Assets/$(OUTPUT)
+	cp -f $(OUTPUT) ../Assets/AprilTag/$(OUTPUT)
 
 clean:
 	rm -f $(OUTPUT) $(OBJS)
