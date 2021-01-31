@@ -1,10 +1,10 @@
+#
+# File listings
+#
+
 TARGET = AprilTag
 
-SRCS = src/apriltag.c \
-       src/apriltag_pose.c \
-       src/apriltag_quad_thresh.c \
-       src/tagStandard41h12.c \
-       common/g2d.c \
+SRCS = common/g2d.c \
        common/homography.c \
        common/image_u8.c \
        common/image_u8x3.c \
@@ -18,47 +18,86 @@ SRCS = src/apriltag.c \
        common/zarray.c \
        common/zhash.c \
        common/zmaxheap.c \
+       apriltag/apriltag.c \
+       apriltag/apriltag_pose.c \
+       apriltag/apriltag_quad_thresh.c \
+       apriltag/tagStandard41h12.c
+
+OUT_DIR = ../Assets/AprilTag/Plugin/$(PLATFORM)
+
+#
+# Intermediate/output files
+#
 
 OBJS = $(SRCS:.c=.o)
 
-CCFLAGS = -O2 -Wall -I. -Iinclude
-LDFLAGS = -shared
-
-ifeq ($(PLATFORM), Windows)
-    PTHREAD = -Wl,-Bstatic -lpthread
-    BIN_PREFIX = x86_64-w64-mingw32
-    OUTPUT = $(TARGET).dll
+ifeq ($(OUTPUT_TYPE), so)
+  OUTPUT = lib$(TARGET).so
+else ifeq ($(OUTPUT_TYPE), a)
+  OUTPUT = lib$(TARGET).a
 else
-    PTHREAD = -lpthread
-    BIN_PREFIX =
-    CCFLAGS += -fPIC
-    LDFLAGS += -rdynamic -fPIC
-    ifeq ($(PLATFORM), MacOS)
-        CCFLAGS += -target x86_64-apple-macos10.12
-        LDFLAGS += -target x86_64-apple-macos10.12
-        OUTPUT = $(TARGET).bundle
-        NOSTRIP = true
-    else
-        OUTPUT = lib$(TARGET).so
-    endif
+  OUTPUT = $(TARGET).$(OUTPUT_TYPE)
 endif
 
-CC = $(BIN_PREFIX)-gcc
-STRIP = $(BIN_PREFIX)-strip
+#
+# Compiler/linker options
+#
+
+CCFLAGS += -O2 -Wall -I. -Iapriltag
+LDFLAGS += -shared
+
+ifeq ($(OUTPUT_TYPE), dll)
+else ifeq ($(OUTPUT_TYPE), a)
+else
+  CCFLAGS += -fPIC
+  LDFLAGS += -rdynamic -fPIC
+endif
+
+ifndef PTHREAD
+  PTHREAD = -lpthread
+endif
+
+#
+# Toolchain
+#
+
+ifndef AR
+  AR = ar
+endif
+
+ifndef CC
+  CC = gcc
+endif
+
+ifndef STRIP
+  STRIP = strip
+endif
+
+#
+# Building rules
+#
 
 all: $(OUTPUT)
 
 copy: $(OUTPUT)
-ifndef NOSTRIP
-	$(STRIP) $(OUTPUT)
-endif
-	cp -f $(OUTPUT) ../Assets/AprilTag/$(OUTPUT)
+	cp -f $(OUTPUT) $(OUT_DIR)/$(OUTPUT)
 
 clean:
 	rm -f $(OUTPUT) $(OBJS)
 
-$(OUTPUT): $(OBJS)
-	$(CC) $(LDFLAGS) -o $(OUTPUT) $(OBJS) $(PTHREAD)
+$(TARGET).dll: $(OBJS)
+	$(CC) $(LDFLAGS) -o $@ $^ $(PTHREAD)
+	$(STRIP) $@
+
+$(TARGET).bundle: $(OBJS)
+	$(CC) $(LDFLAGS) -o $@ $^ $(PTHREAD)
+
+lib$(TARGET).so: $(OBJS)
+	$(CC) $(LDFLAGS) -o $@ $^ $(PTHREAD)
+	$(STRIP) $@
+
+lib$(TARGET).a : $(OBJS)
+	$(AR) -crv $@ $^
 
 .c.o:
 	$(CC) $(CCFLAGS) -c -o $@ $<

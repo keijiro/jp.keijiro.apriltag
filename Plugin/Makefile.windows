@@ -1,2 +1,10 @@
 PLATFORM = Windows
+OUTPUT_TYPE = dll
+
+PTHREAD = -Wl,-Bstatic -lpthread
+
+TOOLCHAIN = x86_64-w64-mingw32
+CC = $(TOOLCHAIN)-gcc
+STRIP = $(TOOLCHAIN)-strip
+
 include Common.mk

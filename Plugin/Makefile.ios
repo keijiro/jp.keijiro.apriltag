@@ -1,0 +1,7 @@
+PLATFORM = iOS
+OUTPUT_TYPE = a
+
+SYSROOT = $(shell xcrun --sdk iphoneos --show-sdk-path)
+CCFLAGS = --sysroot $(SYSROOT) -isysroot $(SYSROOT) -fembed-bitcode
+
+include Common.mk
