@@ -20,8 +20,8 @@ Desktop.ini
 /UserSettings
 /Temp
 
+/Plugin/apriltag/*.o
 /Plugin/common/*.o
-/Plugin/src/*.o
 /Plugin/*.so
 /Plugin/*.dll
 /Plugin/*.bundle
