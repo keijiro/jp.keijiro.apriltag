@@ -41,6 +41,9 @@ sealed class WebcamTest : MonoBehaviour
     {
         if (_webcamRaw.width <= 16) return; // macOS
 
+        if (_webcamRaw.videoVerticallyMirrored)
+            _webcamPreview.transform.localScale = new Vector3(1, -1, 1);
+
         _webcamRaw.GetPixels32(_readBuffer);
         Graphics.Blit(_webcamRaw, _webcamBuffer);
 

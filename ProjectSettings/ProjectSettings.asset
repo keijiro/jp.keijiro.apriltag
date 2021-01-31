@@ -148,6 +148,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.DefaultCompany.AprilTagDetector
     Standalone: com.DefaultCompany.AprilTagDetector
+    iPhone: com.DefaultCompany.AprilTagDetector
   buildNumber:
     Standalone: 0
     iPhone: 0
@@ -436,7 +437,7 @@ PlayerSettings:
   enableInternalProfiler: 0
   logObjCUncaughtExceptions: 1
   enableCrashReportAPI: 0
-  cameraUsageDescription: 
+  cameraUsageDescription: This app requires camera device access.
   locationUsageDescription: 
   microphoneUsageDescription: 
   switchNMETAOverride: 

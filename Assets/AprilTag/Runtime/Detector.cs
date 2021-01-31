@@ -90,20 +90,20 @@ public sealed class Detector : SafeHandleZeroOrMinusOneIsInvalid
 
     #region Unmanaged interface
 
-    [DllImport("AprilTag", EntryPoint="apriltag_detector_create")]
+    [DllImport(Config.DllName, EntryPoint="apriltag_detector_create")]
     static extern Detector _Create();
 
-    [DllImport("AprilTag", EntryPoint="apriltag_detector_destroy")]
+    [DllImport(Config.DllName, EntryPoint="apriltag_detector_destroy")]
     static extern void _Destroy(IntPtr detector);
 
-    [DllImport("AprilTag", EntryPoint="apriltag_detector_add_family_bits")]
+    [DllImport(Config.DllName, EntryPoint="apriltag_detector_add_family_bits")]
     static extern void _AddFamilyBits
       (Detector detector, Family family, int correctedBits);
 
-    [DllImport("AprilTag", EntryPoint="apriltag_detector_remove_family")]
+    [DllImport(Config.DllName, EntryPoint="apriltag_detector_remove_family")]
     static extern void _RemoveFamily(Detector detector, Family family);
 
-    [DllImport("AprilTag", EntryPoint="apriltag_detector_detect")]
+    [DllImport(Config.DllName, EntryPoint="apriltag_detector_detect")]
     static extern DetectionArray _Detect(Detector detector, ImageU8 image);
 
     #endregion

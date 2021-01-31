@@ -36,10 +36,10 @@ public struct Pose : IDisposable
 
     #region Unmanaged interface
 
-    [DllImport("AprilTag", EntryPoint="matd_destroy")]
+    [DllImport(Config.DllName, EntryPoint="matd_destroy")]
     static extern void _MatdDestroy(IntPtr matd);
 
-    [DllImport("AprilTag", EntryPoint="estimate_tag_pose")]
+    [DllImport(Config.DllName, EntryPoint="estimate_tag_pose")]
     static extern double _Estimate(ref DetectionInfo info, ref Pose pose);
 
     #endregion

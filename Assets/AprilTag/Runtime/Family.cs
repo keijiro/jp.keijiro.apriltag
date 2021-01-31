@@ -27,10 +27,10 @@ public sealed class Family : SafeHandleZeroOrMinusOneIsInvalid
 
     #region Unmanaged interface
 
-    [DllImport("AprilTag", EntryPoint = "tagStandard41h12_create")]
+    [DllImport(Config.DllName, EntryPoint = "tagStandard41h12_create")]
     private static extern Family _CreateTagStandard41h12();
 
-    [DllImport("AprilTag", EntryPoint = "tagStandard41h12_destroy")]
+    [DllImport(Config.DllName, EntryPoint = "tagStandard41h12_destroy")]
     private static extern void _DestroyTagStandard41h12(IntPtr ptr);
 
     #endregion

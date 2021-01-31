@@ -53,13 +53,13 @@ public sealed class ImageU8 : SafeHandleZeroOrMinusOneIsInvalid
 
     #region Unmanaged interface
 
-    [DllImport("AprilTag", EntryPoint="image_u8_create_stride")]
+    [DllImport(Config.DllName, EntryPoint="image_u8_create_stride")]
     static extern ImageU8 _CreateStride(uint width, uint height, uint stride);
 
-    [DllImport("AprilTag", EntryPoint="image_u8_create")]
+    [DllImport(Config.DllName, EntryPoint="image_u8_create")]
     static extern ImageU8 _Create(uint width, uint height);
 
-    [DllImport("AprilTag", EntryPoint="image_u8_destroy")]
+    [DllImport(Config.DllName, EntryPoint="image_u8_destroy")]
     static extern void _Destroy(IntPtr image);
 
     #endregion

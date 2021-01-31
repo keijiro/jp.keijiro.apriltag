@@ -38,7 +38,7 @@ public sealed class DetectionArray : SafeHandleZeroOrMinusOneIsInvalid
 
     #region Unmanaged interface
 
-    [DllImport("AprilTag", EntryPoint="apriltag_detections_destroy")]
+    [DllImport(Config.DllName, EntryPoint="apriltag_detections_destroy")]
     static extern void _Destroy(IntPtr detections);
 
     #endregion
