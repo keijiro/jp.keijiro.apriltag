@@ -98,3 +98,13 @@ After changes, the manifest file should look like below:
 ```
 
 [scoped registry]: https://docs.unity3d.com/Manual/upm-scoped.html
+
+Related repositories
+--------------------
+
+- The original AprilTag project repository:
+  https://github.com/AprilRobotics/apriltag
+- Pre-generated tag images:
+  https://github.com/AprilRobotics/apriltag-imgs
+- A fork of the AprilTag repository used to build Unity plugin binaries.
+  https://github.com/keijiro/apriltag
