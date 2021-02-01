@@ -1,4 +1,4 @@
-namespace AprilTag {
+namespace AprilTag.Interop {
 
 static class Config
 {
@@ -9,4 +9,4 @@ static class Config
 #endif
 }
 
-} // namespace AprilTag
+} // namespace AprilTag.Interop

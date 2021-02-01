@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace AprilTag {
+namespace AprilTag.Interop {
 
 [StructLayoutAttribute(LayoutKind.Sequential)]
 public struct ZArray<T> where T : unmanaged
@@ -23,4 +23,4 @@ public struct ZArray<T> where T : unmanaged
     #endregion
 }
 
-} // namespace AprilTag
+} // namespace AprilTag.Interop

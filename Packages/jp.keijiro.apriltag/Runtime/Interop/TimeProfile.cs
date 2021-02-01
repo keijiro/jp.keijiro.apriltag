@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace AprilTag {
+namespace AprilTag.Interop {
 
 [StructLayoutAttribute(LayoutKind.Sequential)]
 public unsafe struct TimeProfileEntry
@@ -50,4 +50,4 @@ public struct TimeProfile
     #endregion
 }
 
-} // namespace AprilTag
+} // namespace AprilTag.Interop

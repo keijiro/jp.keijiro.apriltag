@@ -5,7 +5,7 @@ using Microsoft.Win32.SafeHandles;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 
-namespace AprilTag {
+namespace AprilTag.Interop {
 
 public sealed class ImageU8 : SafeHandleZeroOrMinusOneIsInvalid
 {
@@ -65,4 +65,4 @@ public sealed class ImageU8 : SafeHandleZeroOrMinusOneIsInvalid
     #endregion
 }
 
-} // namespace AprilTag
+} // namespace AprilTag.Interop

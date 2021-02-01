@@ -2,7 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace AprilTag {
+namespace AprilTag.Interop {
 
 [StructLayoutAttribute(LayoutKind.Sequential)]
 public struct Pose : IDisposable
@@ -45,4 +45,4 @@ public struct Pose : IDisposable
     #endregion
 }
 
-} // namespace AprilTag
+} // namespace AprilTag.Interop

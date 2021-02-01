@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace AprilTag {
+namespace AprilTag.Interop {
 
 [StructLayoutAttribute(LayoutKind.Sequential)]
 public struct Matd3x1
@@ -19,4 +19,4 @@ public struct Matd3x3
     public readonly double e20, e21, e22;
 }
 
-} // namespace AprilTag
+} // namespace AprilTag.Interop

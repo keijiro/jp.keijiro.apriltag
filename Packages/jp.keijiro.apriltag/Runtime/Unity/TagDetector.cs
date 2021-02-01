@@ -1,50 +1,43 @@
 using Unity.Collections;
 using Unity.Jobs;
-using Unity.Mathematics;
 using System.Collections.Generic;
+using Color32 = UnityEngine.Color32;
+
+namespace AprilTag {
 
 //
-// Multithreaded tag detection and pose estimation
+// Multithreaded tag detector and pose estimator
 //
-// We can simply use the multithreaded AprilTag detector for tag detection. In
-// contrast, AprilTag only provides single-threaded pose estimator, so we have
-// to manage threading ourselves.
-//
-// We don't want to spawn extra threads just for it, so we run them on Unity's
-// job system. It's a bit complicated due to "impedance mismatch" things
-// (unmanaged vs managed vs Unity DOTS).
-//
-sealed class TagDetector : System.IDisposable
+public sealed class TagDetector : System.IDisposable
 {
-    #region AprilTag objects (unmanaged resources)
+    #region Public properties
 
-    AprilTag.Detector _detector;
-    AprilTag.Family _family;
-    AprilTag.ImageU8 _image;
+    public IEnumerable<TagPose> DetectedTags
+      => _detectedTags;
 
-    #endregion
-
-    #region Internal data
-
-    List<TagPose> _detectedTags = new List<TagPose>();
-    List<(string, long)> _profileData;
+    public IEnumerable<(string name, long time)> ProfileData
+      => _profileData ?? (_profileData = GenerateProfileData());
 
     #endregion
 
-    #region Object lifecycle
+    #region Constructor
 
     public TagDetector(int width, int height)
     {
         // Object creation
-        _detector = AprilTag.Detector.Create();
-        _family = AprilTag.Family.CreateTagStandard41h12();
-        _image = AprilTag.ImageU8.Create(width, height);
+        _detector = Interop.Detector.Create();
+        _family = Interop.Family.CreateTagStandard41h12();
+        _image = Interop.ImageU8.Create(width, height);
 
         // Detector configuration
         _detector.ThreadCount = SystemConfig.PreferredThreadCount;
         _detector.QuadDecimate = 4;
         _detector.AddFamily(_family);
     }
+
+    #endregion
+
+    #region Public methods
 
     public void Dispose()
     {
@@ -58,23 +51,42 @@ sealed class TagDetector : System.IDisposable
         _image = null;
     }
 
+    public void ProcessImage(Color32[] image, float fov, float tagSize)
+    {
+        ImageConverter.Convert(image, _image);
+        RunDetectorAndEstimator(fov, tagSize);
+    }
+
     #endregion
 
-    #region Public properties and methods
+    #region Private objects
 
-    public IEnumerable<TagPose> DetectedTags
-      => _detectedTags;
+    Interop.Detector _detector;
+    Interop.Family _family;
+    Interop.ImageU8 _image;
 
-    public IEnumerable<(string name, long time)> ProfileData
-      => _profileData ?? (_profileData = GenerateProfileData());
+    List<TagPose> _detectedTags = new List<TagPose>();
+    List<(string, long)> _profileData;
 
-    public void DetectTags
-      (UnityEngine.Color32[] image, float fov, float tagSize)
+    #endregion
+
+    #region Detection/estimation procedure
+
+    //
+    // We can simply use the multithreaded AprilTag detector for tag detection.
+    //
+    // In contrast, AprilTag only provides single-threaded pose estimator, so
+    // we have to manage threading ourselves.
+    //
+    // We don't want to spawn extra threads just for it, so we run them on
+    // Unity's job system. It's a bit complicated due to "impedance mismatch"
+    // things (unmanaged vs managed vs Unity DOTS).
+    //
+    void RunDetectorAndEstimator(float fov, float tagSize)
     {
         _profileData = null;
 
         // Run the AprilTag detector.
-        ImageUtil.Convert(image, _image);
         using var tags = _detector.Detect(_image);
         var tagCount = tags.Length;
 
@@ -94,11 +106,7 @@ sealed class TagDetector : System.IDisposable
 
         // Pose estimation job
         var job = new PoseEstimationJob
-          { input = jobInput,
-            tagSize = tagSize,
-            focalCenter = math.double2(_image.Width, _image.Height) / 2,
-            focalLength = _image.Height / 2 / System.Math.Tan(fov / 2),
-            output = jobOutput };
+          (jobInput, jobOutput, _image.Width, _image.Height, fov, tagSize);
 
         // Run and wait the jobs.
         job.Schedule(tagCount, 1, default(JobHandle)).Complete();
@@ -127,3 +135,5 @@ sealed class TagDetector : System.IDisposable
 
     #endregion
 }
+
+} // namespace AprilTag

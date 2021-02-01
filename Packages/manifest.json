@@ -9,9 +9,7 @@
     }
   ],
   "dependencies": {
-    "com.unity.burst": "1.5.0-pre.3",
     "com.unity.ugui": "1.0.0",
-    "org.nuget.system.memory": "4.5.3",
     "com.unity.modules.audio": "1.0.0"
   }
 }

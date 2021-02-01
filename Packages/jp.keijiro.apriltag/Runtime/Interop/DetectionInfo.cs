@@ -2,7 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace AprilTag {
+namespace AprilTag.Interop {
 
 [StructLayoutAttribute(LayoutKind.Sequential)]
 public struct DetectionInfo
@@ -33,4 +33,4 @@ public struct DetectionInfo
     #endregion
 }
 
-} // namespace AprilTag
+} // namespace AprilTag.Interop

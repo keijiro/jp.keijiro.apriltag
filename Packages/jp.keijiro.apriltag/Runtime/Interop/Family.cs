@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
-namespace AprilTag {
+namespace AprilTag.Interop {
 
 public sealed class Family : SafeHandleZeroOrMinusOneIsInvalid
 {
@@ -36,4 +36,4 @@ public sealed class Family : SafeHandleZeroOrMinusOneIsInvalid
     #endregion
 }
 
-} // namespace AprilTag
+} // namespace AprilTag.Interop
