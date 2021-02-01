@@ -22,6 +22,7 @@ Desktop.ini
 
 /Plugin/apriltag/*.o
 /Plugin/common/*.o
+/Plugin/*.a
 /Plugin/*.so
 /Plugin/*.dll
 /Plugin/*.bundle
