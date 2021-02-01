@@ -47,3 +47,54 @@ For example, I'm using [Zoom Q2n-4K video camera] for testing, which gives about
 
 [Zoom Q2n-4K video camera]:
   https://zoomcorp.com/en/us/video-recorders/video-recorders/q2n-4k-handy-video-recorder/
+
+How to install the package
+--------------------------
+
+This package uses the [scoped registry] feature to import dependent packages.
+Please add the following sections to the package manifest file
+(`Packages/manifest.json`).
+
+To the `scopedRegistries` section:
+
+```
+{
+  "name": "Unity NuGet",
+  "url": "https://unitynuget-registry.azurewebsites.net",
+  "scopes": [ "org.nuget" ]
+},
+{
+  "name": "Keijiro",
+  "url": "https://registry.npmjs.com",
+  "scopes": [ "jp.keijiro" ]
+}
+```
+
+To the `dependencies` section:
+
+```
+"jp.keijiro.apriltag": "1.0.0"
+```
+
+After changes, the manifest file should look like below:
+
+```
+{
+  "scopedRegistries": [
+    {
+      "name": "Unity NuGet",
+      "url": "https://unitynuget-registry.azurewebsites.net",
+      "scopes": [ "org.nuget" ]
+    },
+    {
+      "name": "Keijiro",
+      "url": "https://registry.npmjs.com",
+      "scopes": [ "jp.keijiro" ]
+    }
+  ],
+  "dependencies": {
+    "jp.keijiro.apriltag": "1.0.0",
+...
+```
+
+[scoped registry]: https://docs.unity3d.com/Manual/upm-scoped.html
