@@ -420,6 +420,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fe7d1562f4eea84abd2b8136c2e1aff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _resolution: {x: 1280, y: 720}
+  _decimation: 4
   _tagSize: 0.021
   _tagMaterial: {fileID: 2100000, guid: 5828f113fb726f64eab08340333edd86, type: 2}
   _webcamPreview: {fileID: 1084459710}

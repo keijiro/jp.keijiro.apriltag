@@ -22,7 +22,7 @@ public sealed class TagDetector : System.IDisposable
 
     #region Constructor
 
-    public TagDetector(int width, int height)
+    public TagDetector(int width, int height, int decimation = 2)
     {
         // Object creation
         _detector = Interop.Detector.Create();
@@ -31,7 +31,7 @@ public sealed class TagDetector : System.IDisposable
 
         // Detector configuration
         _detector.ThreadCount = SystemConfig.PreferredThreadCount;
-        _detector.QuadDecimate = 4;
+        _detector.QuadDecimate = decimation;
         _detector.AddFamily(_family);
     }
 

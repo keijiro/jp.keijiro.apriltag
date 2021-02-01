@@ -4,13 +4,12 @@ using UI = UnityEngine.UI;
 
 sealed class WebcamTest : MonoBehaviour
 {
+    [SerializeField] Vector2Int _resolution = new Vector2Int(1280, 720);
+    [SerializeField] int _decimation = 4;
     [SerializeField] float _tagSize = 0.05f;
     [SerializeField] Material _tagMaterial = null;
     [SerializeField] UI.RawImage _webcamPreview = null;
     [SerializeField] UI.Text _debugText = null;
-
-    const int Width = 1280;
-    const int Height = 720;
 
     // Webcam input and buffer
     WebCamTexture _webcamRaw;
@@ -24,15 +23,15 @@ sealed class WebcamTest : MonoBehaviour
     void Start()
     {
         // Webcam initialization
-        _webcamRaw = new WebCamTexture(Width, Height, 60);
-        _webcamBuffer = new RenderTexture(Width, Height, 0);
-        _readBuffer = new Color32 [Width * Height];
+        _webcamRaw = new WebCamTexture(_resolution.x, _resolution.y, 60);
+        _webcamBuffer = new RenderTexture(_resolution.x, _resolution.y, 0);
+        _readBuffer = new Color32 [_resolution.x * _resolution.y];
 
         _webcamRaw.Play();
         _webcamPreview.texture = _webcamBuffer;
 
         // Detector and drawer
-        _detector = new AprilTag.TagDetector(Width, Height);
+        _detector = new AprilTag.TagDetector(_resolution.x, _resolution.y, _decimation);
         _drawer = new TagDrawer(_tagMaterial);
     }
 
