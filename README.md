@@ -73,7 +73,7 @@ To the `scopedRegistries` section:
 To the `dependencies` section:
 
 ```
-"jp.keijiro.apriltag": "1.0.0"
+"jp.keijiro.apriltag": "1.0.1"
 ```
 
 After changes, the manifest file should look like below:
@@ -93,7 +93,7 @@ After changes, the manifest file should look like below:
     }
   ],
   "dependencies": {
-    "jp.keijiro.apriltag": "1.0.0",
+    "jp.keijiro.apriltag": "1.0.1",
 ...
 ```
 
@@ -103,10 +103,12 @@ How to detect tags
 ------------------
 
 At first, create the `AprilTag.TagDetector` object specifying the input image
-dimensions.
+dimensions. You can run the detector in a lower resolution by specifying a
+decimation factor. It may improve the speed at the cost of accuracy and
+detection rate.
 
 ```csharp
-detector = new AprilTag.TagDetector(imageWidth, imageHeight);
+detector = new AprilTag.TagDetector(imageWidth, imageHeight, decimation);
 ```
 
 Call the `ProcessImage` method every frame to detect tags from an input image.
