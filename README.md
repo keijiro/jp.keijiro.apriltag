@@ -99,6 +99,43 @@ After changes, the manifest file should look like below:
 
 [scoped registry]: https://docs.unity3d.com/Manual/upm-scoped.html
 
+How to detect tags
+------------------
+
+At first, create the `AprilTag.TagDetector` object specifying the input image
+dimensions.
+
+```csharp
+detector = new AprilTag.TagDetector(imageWidth, imageHeight);
+```
+
+Call the `ProcessImage` method every frame to detect tags from an input image.
+You can use a `Color32` array to give an image. At the same time, you have to
+specify the camera FoV (horizontal) in degrees and the tag size in meters.
+
+```csharp
+webcamTexture.GetPixels32(buffer);
+detector.ProcessImage(buffer, fov, tagSize);
+```
+
+You can retrieve the detected tags from the `DetectedTags` property.
+
+```csharp
+foreach (var tag in detector.DetectedTags)
+    Debug.Log($"{tag.ID} {tag.Position} {tag.Rotation}");
+```
+
+Dispose the detector object when you no longer need it.
+
+```csharp
+detector.Dispose();
+```
+
+For details, please check the [WebCamTest.cs] example, which shows how to
+detect tags from images with `WebCamTexture`.
+
+[WebCamTest.cs]: /Assets/WebcamTest.cs
+
 Related repositories
 --------------------
 
