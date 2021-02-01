@@ -19,10 +19,3 @@ Desktop.ini
 /Recordings
 /UserSettings
 /Temp
-
-/Plugin/apriltag/*.o
-/Plugin/common/*.o
-/Plugin/*.a
-/Plugin/*.so
-/Plugin/*.dll
-/Plugin/*.bundle

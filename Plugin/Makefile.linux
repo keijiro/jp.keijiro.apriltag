@@ -1,4 +1,0 @@
-PLATFORM = Linux
-OUTPUT_TYPE = so
-
-include Common.mk

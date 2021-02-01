@@ -1,8 +1,0 @@
-PLATFORM = macOS
-OUTPUT_TYPE = bundle
-
-TARGET_PLATFORM = x86_64-apple-macos10.12
-CCFLAGS = -target $(TARGET_PLATFORM)
-LDFLAGS = -target $(TARGET_PLATFORM)
-
-include Common.mk
