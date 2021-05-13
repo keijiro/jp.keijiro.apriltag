@@ -1,6 +1,7 @@
 using Unity.Collections;
 using Unity.Jobs;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Color32 = UnityEngine.Color32;
 
 namespace AprilTag {
@@ -57,6 +58,35 @@ public sealed class TagDetector : System.IDisposable
         RunDetectorAndEstimator(fov, tagSize);
     }
 
+    public void ProcessImage(Color32[] image, float focalLength, float focalCenterX, float focalCenterY, float tagSize)
+    {
+        ImageConverter.Convert(image, _image);
+        RunDetectorAndEstimator(focalLength, focalCenterX, focalCenterY, tagSize);
+    }
+
+    public void ProcessImage(Color32[] image, float focalLengthX, float focalLengthY, float focalCenterX, float focalCenterY, float tagSize)
+    {
+        ImageConverter.Convert(image, _image);
+        RunDetectorAndEstimator(focalLengthX, focalLengthY, focalCenterX, focalCenterY, tagSize);
+    }
+
+    public void ProcessFlippedImage(Color32[] image, float fov, float tagSize)
+    {
+        ImageConverter.ConvertFlipped(image, _image);
+        RunDetectorAndEstimator(fov, tagSize);
+    }
+
+    public void ProcessFlippedImage(Color32[] image, float focalLength, float focalCenterX, float focalCenterY, float tagSize)
+    {
+        ImageConverter.ConvertFlipped(image, _image);
+        RunDetectorAndEstimator(focalLength, focalCenterX, focalCenterY, tagSize);
+    }
+
+    public void ProcessFlippedImage(Color32[] image, float focalLengthX, float focalLengthY, float focalCenterX, float focalCenterY, float tagSize)
+    {
+        ImageConverter.ConvertFlipped(image, _image);
+        RunDetectorAndEstimator(focalLengthX, focalLengthY, focalCenterX, focalCenterY, tagSize);
+    }
     #endregion
 
     #region Private objects
@@ -115,6 +145,78 @@ public sealed class TagDetector : System.IDisposable
         jobOutput.CopyTo(_detectedTags);
     }
 
+
+    //
+    // We can simply use the multithreaded AprilTag detector for tag detection.
+    //
+    // In contrast, AprilTag only provides single-threaded pose estimator, so
+    // we have to manage threading ourselves.
+    //
+    // We don't want to spawn extra threads just for it, so we run them on
+    // Unity's job system. It's a bit complicated due to "impedance mismatch"
+    // things (unmanaged vs managed vs Unity DOTS).
+    //
+    void RunDetectorAndEstimator(float fov, float focalCenterX, float focalCenterY, float tagSize)
+    {
+        _profileData = null;
+
+        // Run the AprilTag detector.
+        using var tags = _detector.Detect(_image);
+        var tagCount = tags.Length;
+
+        // Convert the detector output into a NativeArray to make them
+        // accessible from the pose estimation job.
+        using var jobInput = new NativeArray<PoseEstimationJob.Input>(tagCount, Allocator.TempJob);
+
+        var slice = new NativeSlice<PoseEstimationJob.Input>(jobInput);
+
+        for (var i = 0; i < tagCount; i++)
+            slice[i] = new PoseEstimationJob.Input(ref tags[i]);
+
+        // Pose estimation output buffer
+        using var jobOutput
+            = new NativeArray<TagPose>(tagCount, Allocator.TempJob);
+
+        // Pose estimation job
+        var job = new PoseEstimationJob(jobInput, jobOutput, _image.Height, fov, focalCenterX, focalCenterY, tagSize);
+
+        // Run and wait the jobs.
+        job.Schedule(tagCount, 1, default(JobHandle)).Complete();
+
+        // Job output -> managed list
+        jobOutput.CopyTo(_detectedTags);
+    }
+
+    void RunDetectorAndEstimator(float focalLengthX, float focalLengthY, float focalCenterX, float focalCenterY, float tagSize)
+    {
+        _profileData = null;
+
+        // Run the AprilTag detector.
+        using var tags = _detector.Detect(_image);
+        var tagCount = tags.Length;
+
+        // Convert the detector output into a NativeArray to make them
+        // accessible from the pose estimation job.
+        using var jobInput = new NativeArray<PoseEstimationJob.Input>(tagCount, Allocator.TempJob);
+
+        var slice = new NativeSlice<PoseEstimationJob.Input>(jobInput);
+
+        for (var i = 0; i < tagCount; i++)
+            slice[i] = new PoseEstimationJob.Input(ref tags[i]);
+
+        // Pose estimation output buffer
+        using var jobOutput
+            = new NativeArray<TagPose>(tagCount, Allocator.TempJob);
+
+        // Pose estimation job
+        var job = new PoseEstimationJob(jobInput, jobOutput, focalLengthX, focalLengthY, focalCenterX, focalCenterY, tagSize);
+
+        // Run and wait the jobs.
+        job.Schedule(tagCount, 1, default(JobHandle)).Complete();
+
+        // Job output -> managed list
+        jobOutput.CopyTo(_detectedTags);
+    }    
     #endregion
 
     #region Profile data aggregation
