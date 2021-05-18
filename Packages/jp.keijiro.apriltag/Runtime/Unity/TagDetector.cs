@@ -1,7 +1,7 @@
 using Unity.Collections;
 using Unity.Jobs;
 using System.Collections.Generic;
-using Unity.Mathematics;
+
 using Color32 = UnityEngine.Color32;
 
 namespace AprilTag {

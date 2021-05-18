@@ -1,7 +1,5 @@
 using System;
 using Unity.Burst;
-using Unity.Collections;
-using Unity.Collections.LowLevel.Unsafe;
 using Color32 = UnityEngine.Color32;
 using ImageU8 = AprilTag.Interop.ImageU8;
 
