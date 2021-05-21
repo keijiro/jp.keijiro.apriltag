@@ -35,7 +35,30 @@ public sealed class TagDetector : System.IDisposable
         _detector.QuadDecimate = decimation;
         _detector.AddFamily(_family);
     }
-
+    /// <summary>
+    /// Initialized the Detector
+    /// </summary>
+    /// <param name="width">input width</param>
+    /// <param name="height">input height</param>
+    /// <param name="decimation">detection of quads can be done on a lower-resolution image, improving speed at a cost of pose accuracy and a slight decrease in detection rate. Decoding the binary payload is still done at full resolution.</param>
+    /// <param name="decodeSharpening">How much sharpening should be done to decoded images? This can help decode small tags but may or may not help in odd lighting conditions or low light conditions</param>
+    /// <param name="quadSigma">What Gaussian blur should be applied to the segmented image (used for quad detection?) Parameter is the standard deviation in pixels. Very noisy images benefit from non-zero values (e.g. 0.8).</param>
+    /// <param name="refineEdges">When non-zero, the edges of the each quad are adjusted to "snap to" strong gradients nearby. This is useful when decimation is employed, as it can increase the quality of the initial quad estimate substantially. Generally recommended to be on (1). Very computationally inexpensive.</param>
+    public TagDetector(int width, int height,  int decimation = 1,float decodeSharpening = 0.25f, float quadSigma=0, int refineEdges =1)
+    {
+        // Object creation
+        _detector = Interop.Detector.Create();
+        _family = Interop.Family.CreateTagStandard41h12();
+        _image = Interop.ImageU8.Create(width, height);
+   
+        // Detector configuration
+        _detector.DecodeSharpening = decodeSharpening;
+        _detector.RefineEdges = refineEdges;
+        _detector.QuadSigma = quadSigma;
+        _detector.ThreadCount = SystemConfig.PreferredThreadCount;
+        _detector.QuadDecimate = decimation;
+        _detector.AddFamily(_family);
+    }
     #endregion
 
     #region Public methods
