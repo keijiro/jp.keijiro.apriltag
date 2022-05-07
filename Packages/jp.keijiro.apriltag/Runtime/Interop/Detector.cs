@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
@@ -47,7 +46,7 @@ public sealed class Detector : SafeHandleZeroOrMinusOneIsInvalid
     }
 
     unsafe ref InternalData Data
-      => ref Unsafe.AsRef<InternalData>((void*)handle);
+      => ref Util.AsRef<InternalData>((void*)handle);
 
     #endregion
 
@@ -72,7 +71,7 @@ public sealed class Detector : SafeHandleZeroOrMinusOneIsInvalid
       { get => Data.debug != 0; set => Data.debug = value ? 1 : 0; }
 
     public unsafe ref TimeProfile TimeProfile
-      => ref Unsafe.AsRef<TimeProfile>((void*)Data.tp);
+      => ref Util.AsRef<TimeProfile>((void*)Data.tp);
 
     public static Detector Create()
       => _Create();

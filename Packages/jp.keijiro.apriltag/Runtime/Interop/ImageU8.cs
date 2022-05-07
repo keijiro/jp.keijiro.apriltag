@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 using Unity.Collections;
@@ -33,7 +32,7 @@ public sealed class ImageU8 : SafeHandleZeroOrMinusOneIsInvalid
     }
 
     unsafe ref InternalData Data
-      => ref Unsafe.AsRef<InternalData>((void*)handle);
+      => ref Util.AsRef<InternalData>((void*)handle);
 
     #endregion
 

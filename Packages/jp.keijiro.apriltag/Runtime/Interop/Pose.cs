@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace AprilTag.Interop {
@@ -16,8 +15,8 @@ public struct Pose : IDisposable
 
     #region Public properties and methods
 
-    unsafe public ref Matd3x3 R => ref Unsafe.AsRef<Matd3x3>((void*)matd_r);
-    unsafe public ref Matd3x1 t => ref Unsafe.AsRef<Matd3x1>((void*)matd_t);
+    unsafe public ref Matd3x3 R => ref Util.AsRef<Matd3x3>((void*)matd_r);
+    unsafe public ref Matd3x1 t => ref Util.AsRef<Matd3x1>((void*)matd_t);
 
     public Pose(ref DetectionInfo info)
     {

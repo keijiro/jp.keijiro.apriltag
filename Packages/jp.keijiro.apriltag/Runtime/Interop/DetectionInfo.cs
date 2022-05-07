@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace AprilTag.Interop {
@@ -22,7 +21,7 @@ public struct DetectionInfo
       (ref Detection detection, double tagSize,
        double fx, double fy, double cx, double cy)
     {
-        this.det = (IntPtr)Unsafe.AsPointer(ref detection);
+        this.det = (IntPtr)Util.AsPointer(ref detection);
         this.tagsize = tagSize;
         this.fx = fx;
         this.fy = fy;

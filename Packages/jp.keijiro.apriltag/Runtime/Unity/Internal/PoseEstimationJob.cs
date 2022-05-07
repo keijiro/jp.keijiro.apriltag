@@ -1,7 +1,6 @@
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using System.Runtime.CompilerServices;
 
 namespace AprilTag {
 
@@ -16,10 +15,10 @@ struct PoseEstimationJob : Unity.Jobs.IJobParallelFor
         unsafe Interop.Detection* p;
 
         unsafe public Input(ref Interop.Detection r)
-          => p = (Interop.Detection*)Unsafe.AsPointer(ref r);
+          => p = (Interop.Detection*)Interop.Util.AsPointer(ref r);
 
         unsafe public ref Interop.Detection Ref
-          => ref Unsafe.AsRef<Interop.Detection>(p);
+          => ref Interop.Util.AsRef<Interop.Detection>(p);
     }
 
     // I/O

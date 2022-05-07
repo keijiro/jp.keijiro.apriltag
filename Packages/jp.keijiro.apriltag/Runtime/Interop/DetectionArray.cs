@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
@@ -22,7 +21,7 @@ public sealed class DetectionArray : SafeHandleZeroOrMinusOneIsInvalid
     #region zarray representation
 
     unsafe ref ZArray<IntPtr> AsPointerArray
-      => ref Unsafe.AsRef<ZArray<IntPtr>>((void*)handle);
+      => ref Util.AsRef<ZArray<IntPtr>>((void*)handle);
 
     #endregion
 
@@ -32,7 +31,7 @@ public sealed class DetectionArray : SafeHandleZeroOrMinusOneIsInvalid
       => AsPointerArray.AsSpan.Length;
 
     public unsafe ref Detection this[int i]
-      => ref Unsafe.AsRef<Detection>((void*)AsPointerArray.AsSpan[i]);
+      => ref Util.AsRef<Detection>((void*)AsPointerArray.AsSpan[i]);
 
     #endregion
 

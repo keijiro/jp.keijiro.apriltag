@@ -1,9 +1,6 @@
 {
   "author": "Keijiro Takahashi",
-  "dependencies": {
-    "com.unity.burst": "1.5.0-pre.4",
-    "org.nuget.system.memory": "4.5.3"
-  },
+  "dependencies": { "com.unity.burst": "1.5.0-pre.4" },
   "description": "AprilTags visual fiducial system developed by the APRIL robotics laboratory at the University of Michigan",
   "displayName": "AprilTag",
   "keywords": [ "unity" ],
