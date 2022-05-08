@@ -29,7 +29,7 @@ sealed class WebcamTest : MonoBehaviour
         _drawer.Dispose();
     }
 
-    void Update()
+    void LateUpdate()
     {
         _webcamPreview.texture = _source.Texture;
 
