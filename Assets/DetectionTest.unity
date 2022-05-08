@@ -393,6 +393,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 2
   m_AspectRatio: 1.7777778
+--- !u!1 &1233756287
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1233756289}
+  - component: {fileID: 1233756288}
+  m_Layer: 0
+  m_Name: Webcam Input
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1233756288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233756287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40ff2e515a81541cbb664860588e2c6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sourceType: 2
+  _texture: {fileID: 0}
+  _textureUrl: 
+  _video: {fileID: 0}
+  _videoUrl: 
+  _webcamName: 
+  _webcamResolution: {x: 1920, y: 1080}
+  _webcamFrameRate: 30
+  _outputTexture: {fileID: 0}
+  _outputResolution: {x: 1920, y: 1080}
+  _shader: {fileID: 4800000, guid: 3f7d8db4748f54c638a46cec0b0e61f8, type: 3}
+--- !u!4 &1233756289
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233756287}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1427253647
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,33 +458,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1427253649}
   - component: {fileID: 1427253650}
-  - component: {fileID: 1427253648}
-  - component: {fileID: 1427253651}
   m_Layer: 0
-  m_Name: Test
-  m_TagString: Untagged
+  m_Name: Main Camera
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1427253648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1427253647}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fe7d1562f4eea84abd2b8136c2e1aff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _source: {fileID: 1427253651}
-  _decimation: 4
-  _tagSize: 0.021
-  _tagMaterial: {fileID: 2100000, guid: 5828f113fb726f64eab08340333edd86, type: 2}
-  _webcamPreview: {fileID: 1084459710}
-  _debugText: {fileID: 464777374}
 --- !u!4 &1427253649
 Transform:
   m_ObjectHideFlags: 0
@@ -488,26 +523,53 @@ Camera:
   m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &1427253651
+--- !u!1 &1888058337
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1888058339}
+  - component: {fileID: 1888058338}
+  m_Layer: 0
+  m_Name: Detection Test
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1888058338
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1427253647}
+  m_GameObject: {fileID: 1888058337}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40ff2e515a81541cbb664860588e2c6e, type: 3}
+  m_Script: {fileID: 11500000, guid: 8fe7d1562f4eea84abd2b8136c2e1aff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sourceType: 2
-  _texture: {fileID: 0}
-  _textureUrl: 
-  _video: {fileID: 0}
-  _videoUrl: 
-  _webcamName: Roland UVC-01
-  _webcamResolution: {x: 1920, y: 1080}
-  _webcamFrameRate: 30
-  _outputTexture: {fileID: 0}
-  _outputResolution: {x: 1920, y: 1080}
-  _shader: {fileID: 4800000, guid: 3f7d8db4748f54c638a46cec0b0e61f8, type: 3}
+  _source: {fileID: 1233756288}
+  _decimation: 4
+  _tagSize: 0.021
+  _tagMaterial: {fileID: 2100000, guid: 5828f113fb726f64eab08340333edd86, type: 2}
+  _webcamPreview: {fileID: 1084459710}
+  _debugText: {fileID: 464777374}
+--- !u!4 &1888058339
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888058337}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

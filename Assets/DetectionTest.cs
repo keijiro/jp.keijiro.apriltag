@@ -4,7 +4,7 @@ using System.Linq;
 using UI = UnityEngine.UI;
 using Klak.TestTools;
 
-sealed class WebcamTest : MonoBehaviour
+sealed class DetectionTest : MonoBehaviour
 {
     [SerializeField] ImageSource _source = null;
     [SerializeField] int _decimation = 4;
@@ -40,7 +40,7 @@ sealed class WebcamTest : MonoBehaviour
         var image = req.GetData<Color32>(0).ToArray();
 
         // AprilTag detection
-        var fov = GetComponent<Camera>().fieldOfView * Mathf.Deg2Rad;
+        var fov = Camera.main.fieldOfView * Mathf.Deg2Rad;
         _detector.ProcessImage(image, fov, _tagSize);
 
         // Detected tag visualization
