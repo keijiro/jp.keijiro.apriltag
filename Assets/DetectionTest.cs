@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 using System.Linq;
 using UI = UnityEngine.UI;
 using Klak.TestTools;
@@ -33,11 +32,9 @@ sealed class DetectionTest : MonoBehaviour
     {
         _webcamPreview.texture = _source.Texture;
 
-        // Source image readout
-        var req = AsyncGPUReadback.Request(_source.Texture);
-        req.WaitForCompletion();
-        if (req.hasError) return;
-        var image = req.GetData<Color32>(0).ToArray();
+        // Source image acquisition
+        var image = _source.Texture.AsSpan();
+        if (image.IsEmpty) return;
 
         // AprilTag detection
         var fov = Camera.main.fieldOfView * Mathf.Deg2Rad;

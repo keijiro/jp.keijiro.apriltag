@@ -1,5 +1,6 @@
 using Unity.Collections;
 using Unity.Jobs;
+using System;
 using System.Collections.Generic;
 using Color32 = UnityEngine.Color32;
 
@@ -51,7 +52,8 @@ public sealed class TagDetector : System.IDisposable
         _image = null;
     }
 
-    public void ProcessImage(Color32[] image, float fov, float tagSize)
+    public void ProcessImage
+      (ReadOnlySpan<Color32> image, float fov, float tagSize)
     {
         ImageConverter.Convert(image, _image);
         RunDetectorAndEstimator(fov, tagSize);
