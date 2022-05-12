@@ -30,7 +30,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.unity.burst": "1.5.0-pre.4"
+        "com.unity.burst": "1.6.5"
       }
     },
     "jp.keijiro.klak.testtools": {
