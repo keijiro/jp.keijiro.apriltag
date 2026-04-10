@@ -75,7 +75,7 @@ detector = new AprilTag.TagDetector(imageWidth, imageHeight, decimation);
 
 Call the `ProcessImage` method every frame to detect tags from an input image.
 You can use `ReadonlySpan<Color32>` to give an image. At the same time, you have
-to specify the camera FoV (horizontal) in degrees and the tag size in meters.
+to specify the camera FoV (horizontal) in radians (Not Degrees! use `Mathf.Deg2Rad` to convert the cameras FOV to radians)  and the tag size in meters.
 
 ```csharp
 texture.GetPixels32(buffer);
